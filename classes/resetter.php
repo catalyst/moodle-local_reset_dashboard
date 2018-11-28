@@ -39,11 +39,7 @@ class resetter implements resetter_interface {
     }
 
     /**
-     * Reset dashboard page for one user.
-     *
-     * @param int $userid User id.
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function reset_dashboard_for_user($userid) {
         try {
@@ -56,9 +52,7 @@ class resetter implements resetter_interface {
     }
 
     /**
-     * Reset dashboards for all users.
-     *
-     * @param int $batchsize Size of the batch to process users.
+     * @inheritdoc
      */
     public function reset_dashboard_for_all_users($batchsize = 5000) {
         try {
