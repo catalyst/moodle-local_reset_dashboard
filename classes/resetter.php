@@ -61,7 +61,14 @@ class resetter implements resetter_interface {
      * @param int $batchsize Size of the batch to process users.
      */
     public function reset_dashboard_for_all_users($batchsize = 5000) {
-        // TODO: Implement reset_dashboard_for_all_users() method.
+        try {
+            my_reset_page_for_all_users();
+            $result = true;
+        } catch (\Exception $e) {
+            $result = false;
+        }
+
+        return !empty($result);
     }
 
 }

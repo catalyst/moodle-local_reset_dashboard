@@ -41,7 +41,7 @@ interface resetter_interface {
     /**
      * Reset dashboards for all users.
      *
-     * @param int $batchsize Size of the batch to process users.
+     * @param int $batchsize Size of the batch to process users. 0 Means unlimited,
      */
-    public function reset_dashboard_for_all_users($batchsize = 5000);
+    public function reset_dashboard_for_all_users($batchsize = 500);
 }

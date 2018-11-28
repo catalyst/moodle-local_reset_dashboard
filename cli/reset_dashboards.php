@@ -18,69 +18,24 @@
  * This simple CLI script goes through the site and recalculates
  * grades for all courses (default) or a single course
  *
+ * @package   local_reset_dashboard
+ * @author    Matt Porritt (mattp@catalyst-au.net)
+ * @copyright Catalyst IT
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 define('CLI_SCRIPT', true);
 
-require(dirname(dirname(dirname(__FILE__))).'/config.php');
-require_once($CFG->libdir.'/db/upgradelib.php'); // Core Upgrade-related functions.
-require_once($CFG->dirroot . '/my/lib.php');
-require_once("$CFG->libdir/blocklib.php");
-
-// Raise the time limit.
-core_php_time_limit::raise();
-
-// Increase the memory limit.
-raise_memory_limit(MEMORY_EXTRA);
-
-mtrace("Resetting all users dashboards");
-
-$private = MY_PAGE_PRIVATE;
-$pagetype = 'my-index';
-
-global $DB;
-
-// Find all the user pages and all block instances in them.
-$sql = "SELECT bi.id
-        FROM {my_pages} p
-        JOIN {context} ctx ON ctx.instanceid = p.userid AND ctx.contextlevel = :usercontextlevel
-        JOIN {block_instances} bi ON bi.parentcontextid = ctx.id AND
-            bi.pagetypepattern = :pagetypepattern AND
-            (bi.subpagepattern IS NULL OR bi.subpagepattern = " . $DB->sql_concat("''", 'p.id') . ")
-        WHERE p.private = :private";
-
-$params = array('private' => $private,
-    'usercontextlevel' => CONTEXT_USER,
-    'pagetypepattern' => $pagetype);
-
-error_log($sql);
-
-$blockids = $DB->get_fieldset_sql($sql, $params);
-echo "Found: ". count($blockids) . " block IDs \n";
-
-mtrace("Deleting block instances");
-// Delete the block instances.
-if (!empty($blockids)) {
-    blocks_delete_instances($blockids);
-}
-
-// Finally delete the pages.
-mtrace("Deleting pages");
-$DB->delete_records_select('my_pages', 'userid IS NOT NULL AND private = :private', ['private' => $private]);
+require(__DIR__ . '/../../../config.php');
+require_once($CFG->libdir . '/clilib.php');
+require_once($CFG->libdir.'/adminlib.php');
 
 
-// Trigger dashboard has been reset event.
-$eventparams = array(
-    'context' => context_system::instance(),
-    'other' => array(
-        'private' => $private,
-        'pagetype' => $pagetype,
-    ),
-);
-$event = \core\event\dashboards_reset::create($eventparams);
-$event->trigger();
+cli_writeln(date("D M j Y G:i:s T", time())  . " - started resetting dashboards for all users ... ");
 
-// This was moved from the upgrade script. It is safe to do it after.
-mtrace("upgrading block positions");
-upgrade_block_positions();
+$resetter = new \local_reset_dashboard\resetter();
+$resetter->reset_dashboard_for_all_users(0);
 
-exit(0); // 0 means success.
+cli_writeln(date("D M j Y G:i:s T", time()) . " - completed resetting dashboards for all users.");
+
+exit(0);
