@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- *  Unit tests for lib functions.
+ *  Unit tests for resetter class.
  *
- * @package   local_envbar
+ * @package   local_reset_dashboard
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @copyright Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

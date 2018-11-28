@@ -17,9 +17,10 @@
 /**
  * Plugin version and other meta-data are defined here.
  *
- * @package     local_reset_dashboard
- * @copyright   2018 Dmitrii Metelkin <dmitriim@catalyst-au.net>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   local_reset_dashboard
+ * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
+ * @copyright Catalyst IT
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
