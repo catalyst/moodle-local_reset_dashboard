@@ -30,12 +30,28 @@ defined('MOODLE_INTERNAL') || die();
 class resetter implements resetter_interface {
 
     /**
+     * Constructor.
+     */
+    public function __construct() {
+        global $CFG;
+        require_once($CFG->dirroot . '/my/lib.php');
+    }
+
+    /**
      * Reset dashboard page for one user.
      *
      * @param int $userid User id.
+     *
+     * @return bool
      */
     public function reset_dashboard_for_user($userid) {
-        // TODO: Implement reset_dashboard_for_user() method.
+        try {
+            $result = my_reset_page($userid);
+        } catch (\Exception $e) {
+            $result = false;
+        }
+
+        return !empty($result);
     }
 
     /**

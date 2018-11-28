@@ -27,6 +27,10 @@ namespace local_reset_dashboard;
 defined('MOODLE_INTERNAL') || die();
 
 class observer {
+    /**
+     * USer preference name to find out if we need to reset dashboard for a user.
+     */
+    const RESET_DASHBOARD_PREFERENCE = 'need_reset_dashboard';
 
     /**
      * Reset user dashboard on login if required.
@@ -36,7 +40,9 @@ class observer {
     public static function reset_user_dashboard(\core\event\user_loggedin $event) {
         if (self::need_reset_dashboard($event->userid)) {
             $resetter = new resetter();
-            $resetter->reset_dashboard_for_user($event->userid);
+            if ($resetter->reset_dashboard_for_user($event->userid)) {
+                set_user_preference(self::RESET_DASHBOARD_PREFERENCE, 0, $event->userid);
+            }
         }
     }
 
@@ -48,8 +54,7 @@ class observer {
      * @return bool
      */
     protected static function need_reset_dashboard($userid) {
-        // TODO: implement functionality.
-        return false;
+        return get_user_preferences(self::RESET_DASHBOARD_PREFERENCE, 1, $userid);
     }
 
 }

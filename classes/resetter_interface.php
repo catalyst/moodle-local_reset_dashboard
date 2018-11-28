@@ -32,6 +32,8 @@ interface resetter_interface {
      * Reset dashboard page for one user.
      *
      * @param int $userid User id.
+     *
+     * @return bool
      */
     public function reset_dashboard_for_user($userid);
 
