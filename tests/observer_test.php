@@ -23,7 +23,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 defined('MOODLE_INTERNAL') || die();
 
 class local_reset_observer_test extends advanced_testcase {
@@ -39,9 +38,9 @@ class local_reset_observer_test extends advanced_testcase {
     }
 
     /**
-     * Test reset dashboard for a user.
+     * Test that dash board is cleaned when a user logs in and "need_reset_dashboard" is not set.
      */
-    public function test_reset_user_dashboard_when_preference_is_not_set() {
+    public function test_reset_user_dashboard_on_user_login_when_preference_is_not_set() {
         global $DB;
 
         $this->setUser(0);
@@ -57,9 +56,9 @@ class local_reset_observer_test extends advanced_testcase {
     }
 
     /**
-     * Test reset dashboard for a user.
+     * Test that dash board is not cleaned when a user logs in and "need_reset_dashboard" is set to 0.
      */
-    public function test_reset_user_dashboard_when_preference_is_set_to_0() {
+    public function test_reset_user_dashboard_on_user_login_when_preference_is_set_to_0() {
         global $DB;
 
         $this->setUser(0);
@@ -70,16 +69,18 @@ class local_reset_observer_test extends advanced_testcase {
 
         $loginuser = clone($user);
         $this->assertEquals(1, $DB->count_records('my_pages', ['id' => $usermy->id]));
+
         @complete_user_login($loginuser); // Hide session header errors.
+
         $this->assertEquals(1, $DB->count_records('my_pages', ['id' => $usermy->id]));
         $this->assertEquals(0,  get_user_preferences('need_reset_dashboard', null, $user->id));
 
     }
 
     /**
-     * Test reset dashboard for a user.
+     * Test that dash board is cleaned when a user logs in and "need_reset_dashboard" is set to 1.
      */
-    public function test_reset_user_dashboard_when_preference_is_set_to_1() {
+    public function test_reset_user_dashboard_on_user_login_when_preference_is_set_to_1() {
         global $DB;
 
         $this->setUser(0);
@@ -88,10 +89,11 @@ class local_reset_observer_test extends advanced_testcase {
         set_user_preference('need_reset_dashboard', 1, $user->id);
         $usermy = my_copy_page($user->id);
 
-
         $loginuser = clone($user);
         $this->assertEquals(1, $DB->count_records('my_pages', ['id' => $usermy->id]));
+
         @complete_user_login($loginuser); // Hide session header errors.
+
         $this->assertEquals(0, $DB->count_records('my_pages', ['id' => $usermy->id]));
         $this->assertEquals(0,  get_user_preferences('need_reset_dashboard', null, $user->id));
     }
