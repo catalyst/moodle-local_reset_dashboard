@@ -28,6 +28,10 @@ defined('MOODLE_INTERNAL') || die();
 $observers = array(
     array(
         'eventname'   => '\core\event\user_loggedin',
-        'callback'    => '\local_reset_dashboard\observer::reset_user_dashboard',
+        'callback'    => '\local_reset_dashboard\observer::user_loggedin',
+    ),
+    array(
+        'eventname'   => '\core\event\user_loggedinas',
+        'callback'    => '\local_reset_dashboard\observer::user_loggedinas',
     ),
 );

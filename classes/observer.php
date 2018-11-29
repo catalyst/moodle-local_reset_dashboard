@@ -38,11 +38,31 @@ class observer {
      *
      * @param \core\event\user_loggedin $event
      */
-    public static function reset_user_dashboard(\core\event\user_loggedin $event) {
-        if (self::need_reset_dashboard($event->userid)) {
+    public static function user_loggedin(\core\event\user_loggedin $event) {
+        self::reset_user_dashboard($event->userid);
+    }
+
+    /**
+     * Reset user dashboard on login as if required.
+     *
+     * @param \core\event\user_loggedinas $event
+     */
+    public static function user_loggedinas(\core\event\user_loggedinas $event) {
+        self::reset_user_dashboard($event->relateduserid);
+    }
+
+    /**
+     * Reset user dashboard if required.
+     *
+     * @param int $userid User ID.
+     *
+     * @throws \coding_exception
+     */
+    protected static function reset_user_dashboard($userid) {
+        if (self::need_reset_dashboard($userid)) {
             $resetter = new resetter();
-            if ($resetter->reset_dashboard_for_user($event->userid)) {
-                set_user_preference(self::RESET_DASHBOARD_PREFERENCE, 0, $event->userid);
+            if ($resetter->reset_dashboard_for_user($userid)) {
+                set_user_preference(self::RESET_DASHBOARD_PREFERENCE, 0, $userid);
             }
         }
     }
