@@ -26,3 +26,4 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Reset dashboard';
+$string['privacy:metadata'] = 'The local reset dashboard plugin does not store any personal data.';

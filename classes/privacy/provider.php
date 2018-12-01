@@ -13,20 +13,31 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
- * Plugin version and other meta-data are defined here.
+ * Privacy provider.
  *
  * @package   local_reset_dashboard
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @copyright Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->component = 'local_reset_dashboard';
-$plugin->release = '0.1.0';
-$plugin->version = 2018112900.01;
-$plugin->requires = 2018051700;
-$plugin->maturity = MATURITY_ALPHA;
+namespace local_reset_dashboard\privacy;
+defined('MOODLE_INTERNAL') || die;
+use core_privacy\local\metadata\null_provider;
+use core_privacy\local\legacy_polyfill;
+/**
+ * Class provider
+ * @package local_reset_dashboard\privacy
+ */
+class provider implements null_provider {
+    use legacy_polyfill;
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return  string
+     */
+    public static function _get_reason() {
+        return 'privacy:metadata';
+    }
+}
