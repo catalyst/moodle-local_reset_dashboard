@@ -39,7 +39,7 @@ class observer {
      * @param \core\event\user_loggedin $event
      */
     public static function user_loggedin(\core\event\user_loggedin $event) {
-        self::reset_user_dashboard($event->userid);
+        self::reset_user_dashboard($event, $event->userid);
     }
 
     /**
@@ -48,7 +48,7 @@ class observer {
      * @param \core\event\user_loggedinas $event
      */
     public static function user_loggedinas(\core\event\user_loggedinas $event) {
-        self::reset_user_dashboard($event->relateduserid);
+        self::reset_user_dashboard($event, $event->relateduserid);
     }
 
     /**
@@ -58,8 +58,8 @@ class observer {
      *
      * @throws \coding_exception
      */
-    protected static function reset_user_dashboard($userid) {
-        if (self::need_reset_dashboard($userid)) {
+    protected static function reset_user_dashboard($event, $userid) {
+        if (self::need_reset_dashboard($event, $userid)) {
             $resetter = new resetter();
             if ($resetter->reset_dashboard_for_user($userid)) {
                 set_user_preference(self::RESET_DASHBOARD_PREFERENCE, 0, $userid);
@@ -74,8 +74,19 @@ class observer {
      *
      * @return bool
      */
-    protected static function need_reset_dashboard($userid) {
-        return get_user_preferences(self::RESET_DASHBOARD_PREFERENCE, 1, $userid);
+    protected static function need_reset_dashboard($event, $userid) {
+        global $DB;
+        $resetpreference = get_user_preferences(self::RESET_DASHBOARD_PREFERENCE, 1, $userid);
+        if ($resetpreference) {
+            $user = $event->get_record_snapshot('user', $userid);
+            if (empty($user)) {
+                $user = $DB->get_record("user", ['id' => $userid, 'lastlogin' => 0]);
+                $resetpreference = (empty($user)) && $resetpreference;
+            } else {
+                $resetpreference = ($user->lastlogin > 0 ? true : false) && $resetpreference;
+            }
+        }
+        return $resetpreference;
     }
 
 }
