@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_reset_dashboard';
-$plugin->release = '0.1.0';
-$plugin->version = 2018112900.01;
-$plugin->requires = 2018051700;
-$plugin->maturity = MATURITY_ALPHA;
+$plugin->release   = '0.1.0';
+$plugin->version   = 2018112900.01;
+$plugin->requires  = 2017051500;              // Requires Moodle 3.3 and above
+$plugin->maturity  = MATURITY_ALPHA;
