@@ -30,7 +30,7 @@ class local_reset_observer_test extends advanced_testcase {
     /**
      * Initial set up.
      */
-    protected function setUp() {
+    protected function setUp(): void {
         global $CFG;
         require_once($CFG->dirroot . '/my/lib.php');
 
