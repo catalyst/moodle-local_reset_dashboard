@@ -30,3 +30,5 @@ $plugin->release = '0.1.0';
 $plugin->version = 2018112900.01;
 $plugin->requires = 2018051700;
 $plugin->maturity = MATURITY_ALPHA;
+$plugin->incompatible = 403;
+// NOTE This plugin is redundant see https://tracker.moodle.org/browse/MDL-70536.
